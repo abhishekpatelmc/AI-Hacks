@@ -1,6 +1,7 @@
 import { type NextPage } from "next";
 import Head from "next/head";
 // import SearchBar from "../components/SearchBar";
+// import { Configuration, OpenAIApi } from "openai";
 
 const Home: NextPage = () => {
   const handelSubmit = async (e: any) => {
@@ -10,25 +11,61 @@ const Home: NextPage = () => {
       search: "List : " + e.target.search.value,
     };
 
-    // console.log(searchTerm);
+    console.log(searchTerm);
 
     // remove this later
-    const endpoint = "/api/form";
+    // const endpoint = `${process.env.BASE_URL}/completions`;
+    // console.log("this is endpoint:" + endpoint);
 
-    try {
-      // add the endpoint here from .env
-      const res = await fetch(endpoint, {
+    //to check if the API key is working
+    // const API_KEY = process.env.OPENAI_API_KEY;
+    // console.log("this is api:" + API_KEY);
+
+    // try {
+    //   // add the endpoint here from .env
+    //   const res = await fetch(endpoint, {
+    //     method: "POST",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //     body: JSON.stringify(searchTerm.search),
+    //   });
+    //   const data = await res.json();
+    //   console.log("This is the response" + data);
+    // } catch (error) {
+    //   console.log("Catch block: " + error);
+    // }
+
+    // const { OpenAIApi } = require("openai");
+    // const openai = new OpenAIApi();
+
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/completions`,
+      {
         method: "POST",
         headers: {
+          // THis below line avoids "user AGENT error and 400 error"
           "Content-Type": "application/json",
+          Authorization: `Bearer ${process.env.NEXT_PUBLIC_OPENAI_API_KEY}`,
         },
-        body: JSON.stringify(searchTerm.search),
-      });
-      const data = await res.json();
-      console.log("This is the response" + data);
-    } catch (error) {
-      console.log("Catch block: " + error);
-    }
+        body: JSON.stringify({
+          model: "text-davinci-003",
+          prompt: "Say this is a test",
+          max_tokens: 7,
+          temperature: 0,
+        }),
+      }
+    );
+    const data = await response.json();
+    console.log(data);
+
+    // const { Configuration, OpenAIApi } = require("openai");
+    // const configuration = new Configuration({
+    //   apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY,
+    // });
+    // const openai = new OpenAIApi(configuration);
+    // const response = await openai.listModels();
+    // console.log(response);
   };
 
   return (
