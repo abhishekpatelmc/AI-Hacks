@@ -14,7 +14,12 @@ const Home: NextPage = () => {
     console.log(searchTerm);
 
     // remove this later
-    // const endpoint = `https://api.openai.com/v1/models -H 'Authorization: Bearer ${process.env.OPENAI_API_KEY}' `;
+    // const endpoint = `${process.env.BASE_URL}/completions`;
+    // console.log("this is endpoint:" + endpoint);
+
+    //to check if the API key is working
+    // const API_KEY = process.env.OPENAI_API_KEY;
+    // console.log("this is api:" + API_KEY);
 
     // try {
     //   // add the endpoint here from .env
@@ -33,21 +38,34 @@ const Home: NextPage = () => {
 
     // const { OpenAIApi } = require("openai");
     // const openai = new OpenAIApi();
-    // const res = await fetch(endpoint, {
-    //   method: "POST",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //     "Access-Control-Allow-Origin": "*",
-    //     Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
-    //   },
-    //   body: JSON.stringify({
-    //     model: "ada",
-    //     prompt: "Say this is a test",
-    //     max_tokens: 7,
-    //     temperature: 0,
-    //   }),
+
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/completions`,
+      {
+        method: "POST",
+        headers: {
+          // THis below line avoids "user AGENT error and 400 error"
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${process.env.NEXT_PUBLIC_OPENAI_API_KEY}`,
+        },
+        body: JSON.stringify({
+          model: "text-davinci-003",
+          prompt: "Say this is a test",
+          max_tokens: 7,
+          temperature: 0,
+        }),
+      }
+    );
+    const data = await response.json();
+    console.log(data);
+
+    // const { Configuration, OpenAIApi } = require("openai");
+    // const configuration = new Configuration({
+    //   apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY,
     // });
-    // console.log(res);
+    // const openai = new OpenAIApi(configuration);
+    // const response = await openai.listModels();
+    // console.log(response);
   };
 
   return (
